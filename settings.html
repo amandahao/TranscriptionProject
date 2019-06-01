@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/navbar.css" rel="stylesheet">
+  </head>
+  <body>
+    <!--
+    NAVBAR + icons
+    -->
+    <div class="sidenav" style="text-align:center">
+      <a href="/">
+        <img src="http://i65.tinypic.com/nzeryv.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Home</p>
+      </a>
+
+      <a href="/blacklist">
+        <img src="http://i64.tinypic.com/24zf0g8.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Blacklist</p>
+      </a>
+      <a href="/settings">
+        <img src="http://i65.tinypic.com/zx9unq.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Settings</p>
+      </a>
+    </div>
+
+    <div class="main">
+      <h2>Settings</h2>
+      <h4>Account Management</h4>
+
+      <form>
+        Email: <input type="text" id="email" value="filler@gmail.com"><br>
+        <br>
+        Old Password: <input type="password" id="oldpass"><br>
+        New Password: <input type="password" id="newpass"><br>
+        Confirm Password: <input type="password" id="confirmpass"><br>
+      </form>
+      <button id="submit">Submit</button>
+    </div>
+
+    <script type="text/javascript" src="settings.js"></script>
+  </body>
+</html>

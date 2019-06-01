@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OnTrack</title>
+    <link href="/navbar.css" rel="stylesheet">
+    <link href="/home.css" rel="stylesheet">
+    <style>
+    </style>
+  </head>
+  <body>
+    <!--
+    NAVBAR + icons
+    -->
+    <div class="sidenav" style="text-align:center">
+      <a href="/">
+        <img src="http://i65.tinypic.com/nzeryv.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Home</p>
+      </a>
+
+      <a href="/blacklist">
+        <img src="http://i64.tinypic.com/24zf0g8.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Blacklist</p>
+      </a>
+      <a href="/settings">
+        <img src="http://i65.tinypic.com/zx9unq.png" style="height: 35%; width: 35%; text-align: center; margin: 0 auto; display: inline-block">
+        <p>Settings</p>
+      </a>
+    </div>
+
+    <div class="" id="bkgd"></div>
+    <!--<img src="http://i67.tinypic.com/15hfz3a.png"/>-->
+
+    <!--
+    HOME + timer
+    -->
+    <center>
+      <h2>I want to work for ...</h2>
+      <form>
+        <p style="display: inline;">Minutes:</p>
+        <input type="text" id="mns" name="mns" value="20" size="3" maxlength="3" />
+        <p style="display: inline;">Seconds:</p>
+        <input type="text" id="scs" name="scs" value="00" size="2" maxlength="2" />
+
+        <p>Countdown Timer:</p>
+        <div id="time">
+          <span id="showmns">20</span>:<span id="showscs">00</span>
+        </div>
+
+        <div id = "timericons">
+          <input type="button" id="btnct" value="START" onclick="countdownTimer()"/>
+          <input type="button" id="btnct" value="RESET" onclick="reset()"/>
+        </div>
+      </form>
+    </center>
+  </body>
+
+  <script src="/timer.js"></script>
+</html>
