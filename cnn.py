@@ -26,20 +26,20 @@ from keras.optimizers import *
 percent_training = 0.85
 n_estimators = 1000
 
-for i in range(12, 67):
-    ageVar = "age" + str(i) + "images = ''"
-    ageList = "age" + str(i) + "test = ''"
-    filesVar = "age" + str(i) + "files = [os.path.join(age" + str(i) + "images, file) for file in os.listdir(age" + str(i) + "images)]"
-    forLoop = '''
-    for j in range(int(len(age''' + str(i) + '''files)/10)):
-        temp = random.choice(age''' + str(i) + '''files)
-        age''' + str(i) + '''files.remove(age''' + str(i) + '''temp)
-        age''' + str(i) + '''test.append(age''' + str(i) + '''temp)
-    '''
+ageimagesdict = {}
+agetestdict = {}
+filesdict = {}
 
-    exec(ageVar)
-    exec(filesVar)
-    exec(forLoop)
+for i in range(12, 67):
+    ageimagesdict[str(i)] = ''
+    agetestdict[str(i)] = []
+    filesdict[str(i)] = [os.path.join(ageimagesdict[str(i)], file) for file in os.listdir(ageimagesdict[str(i)])]
+    forLoop = '''
+    for j in range(int(len(filesdict[str(i)])/10)):
+        temp = random.choice(filesdict[str(i)])
+        filesdict[str(i)].remove(temp)
+        agetestdict[str(i)].append(temp)
+    '''
 
 # for j in range(int(len(not_age_files)/10)):
 #     not_age_temp = random.choice(not_age_files)
