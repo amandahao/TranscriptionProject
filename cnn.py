@@ -88,7 +88,7 @@ print(test_data)
 
 def one_hot_label(path):
     is_left = path.startswith(age_images) #may need revision, age_images might not exist
-    ohl = np.array([1,0]) if is_left else np.array([0,1])
+    ohl = np.array([1,0]) if is_left else np.array([0,1]) #certainty of left or not left
     return(ohl)
 
 print(train_data)
