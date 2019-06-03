@@ -50,7 +50,7 @@ print(len(not_age_files))
 age_test = []
 # not_age_test = []
 
-# separate 10% of the image data from age_files and not_age_files for traning
+# separate 10% of the image data from age_files and not_age_files for training
 
 for j in range(int(len(age_files)/10)):
     age_temp = random.choice(age_files)
@@ -93,7 +93,7 @@ def one_hot_label(path):
 
 print(train_data)
 
-# iterates through traning data using OpenCV to read and resize the image, then
+# iterates through training data using OpenCV to read and resize the image, then
 # adding it to list train_images with an array [0,1] or [1,0]
 
 def train_data_with_label():
@@ -131,7 +131,7 @@ print(len(testing_images))
 # [len(img) for img in training_images]
 '''
 
-# initialize traning data with labels and images, reshape function makes the array
+# initialize training data with labels and images, reshape function makes the array
 # with dimensions 64, 64, 1, and first dimension is determined
 
 tr_img_data = np.array([i[0] for i in training_images]).reshape(-1,64,64,1)
@@ -167,13 +167,13 @@ print('Finished Model Training in ' + str(time.time() - start) + 's')
 
 
 fig = plt.figure(figsize=(14,14))
-for cnt, data in enumerate(testing_images):
-    y = fig.add_subplot(6,5,cnt+1)
+for cnt, data in enumerate(testing_images): # enumerate puts each value into array
+    y = fig.add_subplot(6,5,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
-    data = img.reshape(1,64,64,1)
+    data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
 
-    if np.argmax(model_out) == 1:
+    if np.argmax(model_out) == 1: # if the max indice in array = 1, ___
         str_label='not_left'
     else:
         str_label='left'
