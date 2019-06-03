@@ -70,6 +70,25 @@ print(test_data)
 # function one_hot_label that creates variable ohl which determines if path is
 # age_files or not_age_files
 
+def genArray(age, label):
+  rightArray = []
+  wrongArray = []
+  if age == label:
+    for i in range(12, 67):
+      if age == i:
+        rightArray.append(1)
+      else:
+        rightArray.append(0)
+    return rightArray
+  else:
+    for i in range(12, 67):
+      x = 0
+      if label == i:
+        wrongArray.append(1)
+      else:
+        wrongArray.append(0)
+    return wrongArray
+
 def one_hot_label(path):
     is_left = path.startswith(age_images) #may need revision, age_images might not exist
     ohl = np.array([1,0]) if is_left else np.array([0,1]) #else use label to find the 1 in the array
