@@ -26,103 +26,105 @@ from keras.optimizers import *
 percent_training = 0.85
 n_estimators = 1000
 
-ageimagesdict = {}
-agetestdict = {}
-filesdict = {}
+ageImages = "./ages"
+
+testList = []
+filesList = []
 
 for i in range(12, 67):
-    ageimagesdict[str(i)] = ''
-    agetestdict[str(i)] = []
-    filesdict[str(i)] = [os.path.join(ageimagesdict[str(i)], file) for file in os.listdir(ageimagesdict[str(i)])]
-    forLoop = '''
-    for j in range(int(len(filesdict[str(i)])/10)):
-        temp = random.choice(filesdict[str(i)])
-        filesdict[str(i)].remove(temp)
-        agetestdict[str(i)].append(temp)
-    '''
+    filesList = [os.path.join(ageImages, file) for file in os.listdir(ageImages)]
 
-# for j in range(int(len(not_age_files)/10)):
-#     not_age_temp = random.choice(not_age_files)
-#     not_age_files.remove(not_age_temp)
-#     not_age_test.append(not_age_temp)
+    # filesList[str(i)] = [os.path.join(ageimagesdict[str(i)], file) for file in os.listdir(ageimagesdict[str(i)])
 
-# initialize variable train_data with the 90% data
+for i in range(int(len(filesList)/10)):
+    temp = random.choice(filesList)
+    filesList.remove(temp)
+    testList.append(temp)
 
-train_data = []
-for i in age_files:
-    train_data.append(i)
+# initialize variable trainData with the 90% data
+
+trainData = []
+for i in filesList:
+    trainData.append(i)
 # for i in not_age_files:
-#     train_data.append(i)
+#     trainData.append(i)
 
-# initialize variable test_data with the 10% data
+# initialize variable testData with the 10% data
 
-test_data = []
-for i in age_test:
-    test_data.append(i)
+testData = []
+for i in testList:
+    testData.append(i)
 # for i in not_age_test:
-#     test_data.append(i)
+#     testData.append(i)
 
 '''
-print(train_data)
-print(test_data)
+print(trainData)
+print(testData)
 '''
 
 # function one_hot_label that creates variable ohl which determines if path is
 # age_files or not_age_files
 
 def genArray(age, label):
-  rightArray = []
-  wrongArray = []
-  if age == label:
-    for i in range(12, 67):
-      if age == i:
-        rightArray.append(1)
-      else:
-        rightArray.append(0)
-    return rightArray
-  else:
-    for i in range(12, 67):
-      x = 0
-      if label == i:
-        wrongArray.append(1)
-      else:
-        wrongArray.append(0)
-    return wrongArray
+    # right? = path.startswith("age18")
+    print(age, end=" ")
+    print(label)
 
-def one_hot_label(path):
-    is_left = path.startswith(age_images) #may need revision, age_images might not exist
-    ohl = np.array([1,0]) if is_left else np.array([0,1]) #else use label to find the 1 in the array
-    return(ohl)
+    rightArray = []
+    wrongArray = []
+    if age == label:
+        for i in range(12, 67):
+          if age == i:
+            rightArray.append(1)
+          else:
+            rightArray.append(0)
+        return rightArray
+    else:
+        for i in range(12, 67):
+            x = 0
+            if label == i:
+                wrongArray.append(1)
+            else:
+                wrongArray.append(0)
+        return wrongArray
 
-print(train_data)
+# def one_hot_label(path):
+#     is_left = path.startswith("age18") #may need revision, age_images might not exist
+#     ohl = np.array([1,0]) if is_left else np.array([0,1]) #else use label to find the 1 in the array
+#     return(ohl)
+
+print(trainData)
 
 # iterates through training data using OpenCV to read and resize the image, then
 # adding it to list train_images with an array [0,1] or [1,0]
 
-def train_data_with_label():
+def trainDataWithLabel():
     train_images = []
-    for path in tqdm(train_data):
+    for path in tqdm(trainData):
         img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (64,64))
-        train_images.append([np.array(img), one_hot_label(path)])
+        for i in range(12, 67):
+            train_images.append([np.array(img), genArray(i, str(path)[10:12])])
+        # train_images.append([np.array(img), one_hot_label(path)]) #genArray(age, str(path)[3:5])
     shuffle(train_images) #randomize the list
     return(train_images)
 
 # iterates through testing (new) data using OpenCV to read and resize the image,
 # then adding it to list train_images with an array [0,1] or [1,0]
 
-def test_data_with_label():
+def testDataWithLabel():
     test_images = []
-    for path in tqdm(test_data):
+    for path in tqdm(testData):
         img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (64,64))
-        test_images.append([np.array(img), one_hot_label(path)])
+        for i in range(12, 67):
+            test_images.append([np.array(img), genArray(i, str(path)[10:12])])
     return(test_images)
 
 # initialize training images and testing images with above functions
 
-training_images = train_data_with_label()
-testing_images = test_data_with_label()
+training_images = trainDataWithLabel()
+testing_images = testDataWithLabel()
 
 '''
 test for functionality:
@@ -167,6 +169,7 @@ model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accu
 model.fit(x=tr_img_data,y=tr_lbl_data,epochs=50,batch_size=100)
 model.summary()
 print('Finished Model Training in ' + str(time.time() - start) + 's')
+print(model.summary())
 
 
 fig = plt.figure(figsize=(14,14))
