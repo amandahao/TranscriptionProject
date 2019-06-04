@@ -170,7 +170,7 @@ optimizer=Adam(lr=1e-3)
 print("3")
 
 model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
-model.fit(x=tr_img_data,y=tr_lbl_data,epochs=50,batch_size=100)
+model.fit(x=tr_img_data,y=tr_lbl_data,epochs=100,batch_size=100)
 print("4")
 
 model.summary()
@@ -184,7 +184,7 @@ print("6")
 
 fig = plt.figure(figsize=(14,14))
 for cnt, data in enumerate(testing_images): # enumerate puts each value into array
-    y = fig.add_subplot(12,5,cnt+1) # add plots and coordinate to graph of image
+    y = fig.add_subplot(40,25,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
     data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
