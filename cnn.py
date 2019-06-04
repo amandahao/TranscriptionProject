@@ -125,7 +125,7 @@ def testDataWithLabel():
 
 training_images = trainDataWithLabel()
 testing_images = testDataWithLabel()
-
+print("1")
 '''
 test for functionality:
 print(len(training_images))
@@ -138,6 +138,7 @@ print(len(testing_images))
 
 # initialize training data with labels and images, reshape function makes the array
 # with dimensions 64, 64, 1, and first dimension is determined
+print("2")
 
 tr_img_data = np.array([i[0] for i in training_images]).reshape(-1,64,64,1)
 tr_lbl_data = np.array([i[1] for i in training_images])
@@ -162,31 +163,45 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(512,activation='relu'))
 model.add(Dropout(rate=0.5))
-model.add(Dense(2,activation='softmax'))
+model.add(Dense(55,activation='softmax'))
 optimizer=Adam(lr=1e-3)
+print("3")
 
 model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
 model.fit(x=tr_img_data,y=tr_lbl_data,epochs=50,batch_size=100)
+print("4")
+
 model.summary()
+
+print("5")
+
 print('Finished Model Training in ' + str(time.time() - start) + 's')
-print(model.summary())
+# print(model.summary())
+print("6")
 
 
 fig = plt.figure(figsize=(14,14))
 for cnt, data in enumerate(testing_images): # enumerate puts each value into array
-    y = fig.add_subplot(6,5,cnt+1) # add plots and coordinate to graph of image
+    y = fig.add_subplot(1000,1000,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
     data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
+    print("7")
 
-    if np.argmax(model_out) == 1: # if the max indice in array = 1, ___
-        str_label='not_left'
-    else:
-        str_label='left'
+    print(model_out)
+    # if np.argmax(model_out) == 1: # if the max indice in array = 1, ___
+    #     str_label='not_left'
+    # else:
+    #     str_label='left'
 
-    y.imshow(img,cmap='gray')
-    plt.title(str_label)
-    y.axes.get_xaxis().set_visible(False)
-    y.axes.get_yaxis().set_visible(False)
+    # y.imshow(img,cmap='gray')
+    # plt.title(str_label)
+    # y.axes.get_xaxis().set_visible(False)
+    # y.axes.get_yaxis().set_visible(False)
 
-plt.show(block=True)
+# plt.show(block=True)
+
+testImg = cv2.imread(testImages[1], cv2.IMREAD_GRAYSCALE)
+testImg = cv2.resize(testImg, (64,64))
+testImg = np.array(testImg)
+model.predict(testImg)
