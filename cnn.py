@@ -36,7 +36,7 @@ for i in range(12, 67):
 
     # filesList[str(i)] = [os.path.join(ageimagesdict[str(i)], file) for file in os.listdir(ageimagesdict[str(i)])
 
-for i in range(int(len(filesList)/10)):
+for i in range(int(len(filesList)*1/100)):
     temp = random.choice(filesList)
     filesList.remove(temp)
     testList.append(temp)
@@ -68,7 +68,6 @@ print(testData)
 def genArray(label):
     # right? = path.startswith("age18")
     # print(age, end=" ")
-    print(label)
 
     rightArray = []
     # wrongArray = []
@@ -93,7 +92,7 @@ def genArray(label):
 #     ohl = np.array([1,0]) if is_left else np.array([0,1]) #else use label to find the 1 in the array
 #     return(ohl)
 
-print(trainData)
+# print(trainData)
 
 # iterates through training data using OpenCV to read and resize the image, then
 # adding it to list train_images with an array [0,1] or [1,0]
@@ -149,6 +148,9 @@ tst_lbl_data = np.array([i[1] for i in testing_images])
 
 #initialize Keras Sequential Model
 
+print("testing_images:" + str(enumerate(testing_images)))
+
+
 model = Sequential()
 
 model.add(InputLayer(input_shape = [64,64,1])) # tells model that input shape is 64,64,1, like above
@@ -158,19 +160,62 @@ model.add(MaxPool2D(pool_size=5,padding='same'))
 model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
 model.add(MaxPool2D(pool_size=5,padding='same'))
 
-model.add(Conv2D(filters=80,kernel_size=5,strides=1,padding='same',activation='relu'))
+model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
 model.add(MaxPool2D(pool_size=5,padding='same'))
+
+model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+model.add(MaxPool2D(pool_size=5,padding='same'))
+
+model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+model.add(MaxPool2D(pool_size=5,padding='same'))
+
+# model.add(Conv2D(filters=80,kernel_size=5,strides=1,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=80,kernel_size=5,strides=1,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=80,kernel_size=5,strides=1,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
+#
+# model.add(Conv2D(filters=50,kernel_size=5,strides=5,padding='same',activation='relu'))
+# model.add(MaxPool2D(pool_size=5,padding='same'))
 
 model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(512,activation='relu'))
 model.add(Dropout(rate=0.5))
 model.add(Dense(55,activation='softmax'))
-optimizer=Adam(lr=1e-3)
+optimizer=SGD(lr=1e-3, momentum=0.0, decay=0.0, nesterov=False) #Adam(lr=1e-3)
 print("3")
 
 model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
-model.fit(x=tr_img_data,y=tr_lbl_data,epochs=100,batch_size=100)
+model.fit(x=tr_img_data,y=tr_lbl_data,epochs=50,batch_size=100)
+
 print("4")
 
 model.summary()
@@ -181,10 +226,10 @@ print('Finished Model Training in ' + str(time.time() - start) + 's')
 # print(model.summary())
 print("6")
 
-
-fig = plt.figure(figsize=(14,14))
+rightCount = 0
+fig = plt.figure(figsize=(50,50))
 for cnt, data in enumerate(testing_images): # enumerate puts each value into array
-    y = fig.add_subplot(40,25,cnt+1) # add plots and coordinate to graph of image
+    y = fig.add_subplot(2,5,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
     data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
@@ -192,11 +237,19 @@ for cnt, data in enumerate(testing_images): # enumerate puts each value into arr
 
     # print(model_out)
     str_label = np.argmax(model_out) + 12;
+    label = str(testData[cnt])[10:12]
+    if str_label == label:
+        rightCount +=1
+    # for path in tqdm(testData):
+    # str(path)[10:12]
 
     y.imshow(img,cmap='gray')
     plt.title(str_label)
     y.axes.get_xaxis().set_visible(False)
     y.axes.get_yaxis().set_visible(False)
+
+accuracy = (rightCount/len(testData)) * 100
+print("accuracy: " + str(accuracy))
 
 plt.show(block=True)
 
