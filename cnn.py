@@ -65,28 +65,28 @@ print(testData)
 # function one_hot_label that creates variable ohl which determines if path is
 # age_files or not_age_files
 
-def genArray(age, label):
+def genArray(label):
     # right? = path.startswith("age18")
-    print(age, end=" ")
+    # print(age, end=" ")
     print(label)
 
     rightArray = []
-    wrongArray = []
-    if age == label:
-        for i in range(12, 67):
-          if age == i:
-            rightArray.append(1)
-          else:
-            rightArray.append(0)
-        return rightArray
-    else:
-        for i in range(12, 67):
-            x = 0
-            if label == i:
-                wrongArray.append(1)
-            else:
-                wrongArray.append(0)
-        return wrongArray
+    # wrongArray = []
+    # if age == label:
+    for i in range(12, 67):
+      if label == i:
+        rightArray.append(1)
+      else:
+        rightArray.append(0)
+    return rightArray
+    # else:
+    #     for i in range(12, 67):
+    #         x = 0
+    #         if label == i:
+    #             wrongArray.append(1)
+    #         else:
+    #             wrongArray.append(0)
+    #     return wrongArray
 
 # def one_hot_label(path):
 #     is_left = path.startswith("age18") #may need revision, age_images might not exist
@@ -103,8 +103,10 @@ def trainDataWithLabel():
     for path in tqdm(trainData):
         img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (64,64))
-        for i in range(12, 67):
-            train_images.append([np.array(img), genArray(i, str(path)[10:12])])
+        train_images.append([np.array(img), genArray(str(path)[10:12])])
+
+        #for i in range(12, 67):
+        #    train_images.append([np.array(img), genArray(i, str(path)[10:12])])
         # train_images.append([np.array(img), one_hot_label(path)]) #genArray(age, str(path)[3:5])
     shuffle(train_images) #randomize the list
     return(train_images)
@@ -117,8 +119,8 @@ def testDataWithLabel():
     for path in tqdm(testData):
         img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (64,64))
-        for i in range(12, 67):
-            test_images.append([np.array(img), genArray(i, str(path)[10:12])])
+        # for i in range(12, 67):
+        test_images.append([np.array(img), genArray(str(path)[10:12])])
     return(test_images)
 
 # initialize training images and testing images with above functions
@@ -182,26 +184,23 @@ print("6")
 
 fig = plt.figure(figsize=(14,14))
 for cnt, data in enumerate(testing_images): # enumerate puts each value into array
-    y = fig.add_subplot(1000,1000,cnt+1) # add plots and coordinate to graph of image
+    y = fig.add_subplot(12,5,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
     data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
-    print("7")
-
     print(model_out)
-    # if np.argmax(model_out) == 1: # if the max indice in array = 1, ___
-    #     str_label='not_left'
-    # else:
-    #     str_label='left'
 
-    # y.imshow(img,cmap='gray')
-    # plt.title(str_label)
-    # y.axes.get_xaxis().set_visible(False)
-    # y.axes.get_yaxis().set_visible(False)
+    # print(model_out)
+    str_label = np.argmax(model_out) + 12;
 
-# plt.show(block=True)
+    y.imshow(img,cmap='gray')
+    plt.title(str_label)
+    y.axes.get_xaxis().set_visible(False)
+    y.axes.get_yaxis().set_visible(False)
 
-testImg = cv2.imread(testImages[1], cv2.IMREAD_GRAYSCALE)
-testImg = cv2.resize(testImg, (64,64))
-testImg = np.array(testImg)
-model.predict(testImg)
+plt.show(block=True)
+
+# testImg = cv2.imread(testImages[1], cv2.IMREAD_GRAYSCALE)
+# testImg = cv2.resize(testImg, (64,64))
+# testImg = np.array(testImg)
+# model.predict(testImg)
