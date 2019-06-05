@@ -237,9 +237,9 @@ print('Finished Model Training in ' + str(time.time() - start) + 's')
 print("6")
 
 rightCount = 0
-fig = plt.figure(figsize=(50,50))
+fig = plt.figure(figsize=(14,14))
 for cnt, data in enumerate(testing_images): # enumerate puts each value into array
-    y = fig.add_subplot(2,5,cnt+1) # add plots and coordinate to graph of image
+    y = fig.add_subplot(4,25,cnt+1) # add plots and coordinate to graph of image
     img = data[0]
     data = img.reshape(1,64,64,1) # reshape the dimensions of the image
     model_out = model.predict([data])
@@ -258,8 +258,8 @@ for cnt, data in enumerate(testing_images): # enumerate puts each value into arr
     y.axes.get_xaxis().set_visible(False)
     y.axes.get_yaxis().set_visible(False)
 
-accuracy = (rightCount/len(testData)) * 100
-print("accuracy: " + str(accuracy))
+accuracy = (rightCount / len(testing_images))
+print(accuracy)
 
 plt.show(block=True)
 
