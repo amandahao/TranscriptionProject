@@ -1,3 +1,13 @@
+'''OVERVIEW: the Keras Model is inaccurate. a few ways to make it more accurate:
+1. get more data
+2. change the optimizer in the model (line 218)
+3. change number of batches or epochs (figure out what batches are)
+4. change dropout 
+
+resource:
+https://stackoverflow.com/questions/37213388/keras-accuracy-does-not-change
+'''
+
 import time
 start = time.time()
 
